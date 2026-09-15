@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import type { TargetAndTransition, Transition } from 'framer-motion';
 import {
   IconArrowUpRight,
   IconCheck,
@@ -19,6 +20,21 @@ import type { Project } from '../types';
 export const ProjectsSection: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<'all' | 'mobile' | 'web' | 'system'>('all');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
+  const [isDesktop, setIsDesktop] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth >= 1024;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const filteredProjects = activeCategory === 'all'
     ? PROJECTS_DATA
@@ -261,19 +277,62 @@ export const ProjectsSection: React.FC = () => {
             gap: '1.75rem',
           }}
         >
-          {filteredProjects.map((project, index) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.1 }}
-              transition={{ duration: 0.35, delay: index * 0.08 }}
-              style={{
-                display: 'flex',
-                position: 'relative',
-                width: '100%',
-              }}
-            >
+          {filteredProjects.map((project, index) => {
+            const isScatterRow = isDesktop && activeCategory === 'all' && filteredProjects.length === 3;
+
+            let initialAnim: TargetAndTransition = { opacity: 0, y: 20 };
+            let whileInViewAnim: TargetAndTransition = { opacity: 1, y: 0 };
+            let transitionAnim: Transition = { duration: 0.35, delay: index * 0.08 };
+            let zIndexVal = 1;
+
+            if (isScatterRow) {
+              if (index === 0) {
+                // Left card: initially tucked underneath the middle card
+                initialAnim = { opacity: 0.85, x: '108%', y: 16, rotate: -5, scale: 0.94 };
+                whileInViewAnim = { opacity: 1, x: '0%', y: 0, rotate: 0, scale: 1 };
+                transitionAnim = {
+                  duration: 1.2,
+                  delay: 0.1,
+                  ease: [0.22, 1, 0.36, 1],
+                };
+                zIndexVal = 2;
+              } else if (index === 1) {
+                // Middle card: on top of the deck
+                initialAnim = { opacity: 0.95, x: '0%', y: 0, rotate: 0, scale: 0.98 };
+                whileInViewAnim = { opacity: 1, x: '0%', y: 0, rotate: 0, scale: 1 };
+                transitionAnim = {
+                  duration: 1.0,
+                  delay: 0.05,
+                  ease: [0.22, 1, 0.36, 1],
+                };
+                zIndexVal = 10;
+              } else if (index === 2) {
+                // Right card: initially tucked underneath the middle card
+                initialAnim = { opacity: 0.85, x: '-108%', y: 16, rotate: 5, scale: 0.94 };
+                whileInViewAnim = { opacity: 1, x: '0%', y: 0, rotate: 0, scale: 1 };
+                transitionAnim = {
+                  duration: 1.2,
+                  delay: 0.1,
+                  ease: [0.22, 1, 0.36, 1],
+                };
+                zIndexVal = 1;
+              }
+            }
+
+            return (
+              <motion.div
+                key={project.id}
+                initial={initialAnim}
+                whileInView={whileInViewAnim}
+                viewport={{ once: true, amount: 0.1 }}
+                transition={transitionAnim}
+                style={{
+                  display: 'flex',
+                  position: 'relative',
+                  zIndex: zIndexVal,
+                  width: '100%',
+                }}
+              >
                 <Card
                   variant="interactive"
                   padding="md"
@@ -373,7 +432,8 @@ export const ProjectsSection: React.FC = () => {
                   </div>
                 </Card>
               </motion.div>
-            ))}
+            );
+          })}
         </div>
 
         {/* Project Details Modal */}
