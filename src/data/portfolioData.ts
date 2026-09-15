@@ -3,9 +3,10 @@ import type { Experience, Project, Skill } from '../types';
 export const PERSONAL_INFO = {
   name: 'Senior Frontend & Mobile Developer',
   tagline: 'Engineering Corporate-Grade Web & Mobile Experiences',
-  role: 'Frontend Web & Mobile App Specialist',
+  role: 'Frontend Web & Mobile App',
   bio: 'Specialized in building high-performance, accessible, and scalable digital products. Deep proficiency across React, Next.js, Angular, React Native, and Expo with a strong emphasis on clean code architecture and modular design systems.',
   email: 'developer.connect@portfolio.dev',
+  whatsapp: '+919999999999', // Replace with your actual WhatsApp number (including country code)
   status: 'Open for Enterprise Roles & Senior Contracts',
   location: 'Remote / Hybrid',
   stats: [
@@ -78,30 +79,30 @@ export const SKILLS_DATA: Skill[] = [
 export const EXPERIENCE_DATA: Experience[] = [
   {
     company: 'uipirate',
-    role: 'Frontend Engineer & UI Component Specialist',
-    period: '2023 - Present',
-    type: 'Full-Time / Contract',
+    role: 'Frontend Engineer & UI Component',
+    period: '2026 - Present',
+    type: 'Own Website',
     location: 'Remote',
-    overview: 'Spearheaded the engineering of functional, accessible, and attractive copy-paste UI component libraries and modular production templates utilized across multiple enterprise client projects.',
+    overview: 'Spearheaded the engineering of functional, accessible, and attractive copy-paste UI component libraries and modular production templates for organisation own website.',
     highlights: [
-      'Architected 80+ reusable, copy-paste-ready UI components with distinct variants, strict TypeScript typings, and zero external runtime bloat.',
+      'Architected 10+ reusable, copy-paste-ready UI components with distinct variants, strict TypeScript typings, and zero external runtime bloat.',
       'Enforced corporate-grade code standards, linting rules, and modular folder structures for multi-tenant frontend architectures.',
       'Engineered fluid micro-interactions, responsive states, and full WCAG accessibility compliance across light/dark themes.',
       'Reduced initial client setup time by 45% through self-documenting prop interfaces and modular tokenized styling systems.'
     ],
-    technologies: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Design Tokens'],
+    technologies: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Design Tokens'],
   },
   {
-    company: 'School Management Suite (EdTech)',
+    company: 'uipirate',
     role: 'Lead Mobile App Developer',
-    period: '2022 - 2023',
+    period: '2026 - Present',
     type: 'Client Project',
-    location: 'Hybrid',
+    location: 'Remote',
     overview: 'Engineered two interconnected production mobile apps (Student App & Teacher App) powering a full-scale School Management ERP ecosystem.',
     highlights: [
       'Delivered dual cross-platform mobile apps for iOS and Android using React Native and Expo.',
       'Engineered the Teacher App with 1-tap rapid roll-call attendance, gradebook entry, and instant announcements.',
-      'Built the Student App featuring real-time attendance tracking, exam timetables, homework submissions, and offline caching.',
+      'Built the Student App featuring real-time attendance tracking, exam timetables, homework and submissions.',
       'Maintained 99.4% crash-free sessions across 10,000+ active student and faculty users.'
     ],
     technologies: ['React Native', 'Expo', 'TypeScript', 'Context API', 'AsyncStorage', 'REST APIs'],
@@ -116,21 +117,21 @@ export const PROJECTS_DATA: Project[] = [
     category: 'mobile',
     tagline: 'Cross-platform student portal for attendance, timetables & assignments',
     summary: 'A clean, high-performance mobile application engineered with React Native and Expo allowing students and parents to track academic progress, attendance records, exam schedules, and school announcements.',
-    details: 'The Student App serves as the primary touchpoint for thousands of learners. Key technical considerations included optimistic UI updates, offline data caching for spotty network environments, and lightweight chart visualizations of student performance metrics.',
+    details: 'The Student App serves as the primary touchpoint for thousands of learners. Key technical considerations included optimistic UI updates and lightweight chart visualizations of student performance metrics.',
     role: 'Lead Mobile Developer',
     stack: ['React Native', 'Expo', 'TypeScript', 'AsyncStorage', 'React Navigation'],
-    targetAudience: 'Students & Parents across K-12 and Higher-Ed institutions',
+    targetAudience: 'Students & Parents across the institutions',
     keyFeatures: [
-      'Interactive Daily Timetable with countdown to current and upcoming periods',
-      'Real-time Attendance Analytics with monthly percentage warnings and trends',
+      'Interactive Daily Timetable with current and upcoming periods',
+      'Real-time Attendance Analytics with monthly percentage and warnings',
       'Digital Homework Hub with PDF view, deadline countdowns, and submission confirmation',
       'Instant Emergency & Routine Broadcast Notifications via push service',
-      'Digital Report Card & Gradebook breakdown by semester'
+      'Digital Report Card & Gradebook breakdown'
     ],
     architectureHighlights: [
-      'Engineered offline-first state syncing using AsyncStorage with conflict resolution',
-      'Optimized list rendering using FlashList for high-density notices and schedules',
-      'Designed a distraction-free student UI adhering to high legibility and contrast'
+      'Engineered real-time student attendance status to the parents',
+      'Optimized list rendering using FlatList for clean code architect',
+      'Build a simple understanding UI/UX frontend'
     ],
     mockupType: 'mobile-student'
   },
@@ -184,48 +185,26 @@ export const PROJECTS_DATA: Project[] = [
     ],
     mockupType: 'web-uipirate'
   },
-  {
-    id: 'enterprise-saas-portal',
-    title: 'Next.js Enterprise SaaS Platform',
-    platform: 'Web Platform',
-    category: 'web',
-    tagline: 'High-performance web dashboard showcasing Next.js capabilities',
-    summary: 'A showcase of scalable web architecture contrasting single-page client rendering with server-side generation, dynamic data fetching, edge caching, and rich analytical charts.',
-    details: 'Built to illustrate why Next.js is preferred for large-scale enterprise portals that demand instant initial page loads (SSR), organic search engine discovery (SEO), and dynamic data caching.',
-    role: 'Full-Frontend Engineer',
-    stack: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'Server Components'],
-    targetAudience: 'Enterprise Stakeholders, Operations & Engineering Leads',
-    keyFeatures: [
-      'Server-Side Rendered (SSR) financial metrics and user behavior charts',
-      'Instant search and data filtering with URL search params state synchronization',
-      'Role-based dashboard views (Admin, Manager, Contributor)',
-      'Optimized responsive layouts for desktop command centers down to mobile'
-    ],
-    architectureHighlights: [
-      'Zero-JS server components for static sections, cutting bundle weight by 60%',
-      'Predictive route prefetching and streaming hydration using Suspense boundaries'
-    ],
-    mockupType: 'web-saas'
-  }
+
 ];
 
 export const ARCHITECTURE_EXPLANATION = {
   whyReactHere: {
     title: 'Why React + Vite for This Portfolio?',
-    summary: 'Agile, Zero-Overhead Client Architecture',
+    summary: 'Fast, lightweight & zero server overhead',
     points: [
-      'Pure Client-Side Agility: As a standalone personal showcase, a client-rendered SPA provides lightning-fast hot module replacement, 0 server cold-starts, and cost-effective static hosting anywhere (Vercel, Netlify, GitHub Pages).',
-      'Direct State & Animation Control: Instant, tear-free theme transitions (Light/Dark mode) and uninterrupted Framer Motion micro-interactions without SSR hydration mismatch or flash.',
-      'Transparent Code Architecture: Clean, readable TypeScript structure where recruiters and tech leads can immediately inspect the component patterns without framework-specific boilerplate.'
+      'No Over-Engineering: A personal portfolio is an interactive showcase, not a database-driven app. Using a full-stack framework like Next.js here would add unnecessary server complexity and build overhead with no real benefit.',
+      'Smooth Client Interactions: Pure client-side React makes theme switching, project filtering, and UI animations run instantly and smoothly without server hydration glitches.',
+      'Instant Static Delivery: Vite compiles the app into clean, static files that load instantly from any global CDN with 100% uptime and zero server costs.'
     ]
   },
   whyNextJsForEnterprise: {
     title: 'When & Why Next.js Is My Strategic Choice for Enterprise',
-    summary: 'Large-Scale Performance, SSR, Edge Caching & SEO',
+    summary: 'Best for public SEO, server logic & large teams',
     points: [
-      'Server-Side Rendering (SSR) & Static Generation (SSG): Crucial for high-traffic platforms, e-commerce, and SaaS where sub-second First Contentful Paint (FCP) and automatic SEO indexing directly impact revenue.',
-      'Server Components & Edge Caching: Rendering heavy data logic on the server reduces the client bundle size drastically, enabling buttery-smooth mobile web experiences.',
-      'Built-in Image & Asset Optimization: Automatic WebP/AVIF transcoding, responsive image sizing, and streaming suspense boundaries make Next.js the gold standard for enterprise web applications.'
+      'Search Engine Optimization (SEO): For e-commerce and public products, server-side rendering ensures search engines can easily read and rank every page.',
+      'Secure Server-Side Logic: Next.js is the right choice when an application needs backend database calls, user authentication, and secret API keys kept off the user’s browser.',
+      'Built for Scaling Teams: Built-in file routing, automatic image optimization, and server caching give engineering teams a solid, production-ready foundation out of the box.'
     ]
   }
 };

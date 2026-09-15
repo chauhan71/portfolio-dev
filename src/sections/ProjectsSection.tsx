@@ -1,23 +1,20 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  IconArrowUpRight, 
-  IconCheck, 
-  IconSchool, 
-  IconUserCheck, 
-  IconCalendarEvent, 
-  IconBellRinging, 
-  IconBooks, 
+import {
+  IconArrowUpRight,
+  IconCheck,
+  IconSchool,
+  IconUserCheck,
+  IconCalendarEvent,
+  IconBellRinging,
+  IconBooks,
   IconClock,
   IconShieldCheck
 } from '@tabler/icons-react';
-import { SectionHeader } from '../layout/SectionHeader';
-import { Card } from '../ui/Card';
-import { Badge } from '../ui/Badge';
-import { Button } from '../ui/Button';
-import { Modal } from '../ui/Modal';
-import { PROJECTS_DATA } from '../../data/portfolioData';
-import type { Project } from '../../types';
+import { SectionHeader } from '../layout';
+import { Card, Badge, Button, Modal } from '../components/ui';
+import { PROJECTS_DATA } from '../data/portfolioData';
+import type { Project } from '../types';
 
 export const ProjectsSection: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<'all' | 'mobile' | 'web' | 'system'>('all');
@@ -227,15 +224,16 @@ export const ProjectsSection: React.FC = () => {
             flexWrap: 'wrap',
           }}
         >
-          {[
-            { label: 'All Featured', value: 'all' },
-            { label: 'Mobile Apps (React Native / Expo)', value: 'mobile' },
-            { label: 'UI Systems (uipirate)', value: 'system' },
-            { label: 'Web Platforms (Next.js)', value: 'web' },
-          ].map((tab) => (
+          {(
+            [
+              { label: 'All Featured', value: 'all' },
+              { label: 'Mobile Apps', value: 'mobile' },
+              { label: 'UI Systems', value: 'system' },
+            ] as const
+          ).map((tab) => (
             <button
               key={tab.value}
-              onClick={() => setActiveCategory(tab.value as any)}
+              onClick={() => setActiveCategory(tab.value)}
               className="btn-reset"
               style={{
                 padding: '0.5rem 1.1rem',
@@ -259,119 +257,123 @@ export const ProjectsSection: React.FC = () => {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-            gap: '2rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 310px), 1fr))',
+            gap: '1.75rem',
           }}
         >
           {filteredProjects.map((project, index) => (
             <motion.div
               key={project.id}
-              initial={{ opacity: 0, y: 25 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.45, delay: index * 0.1 }}
-              style={{ display: 'flex' }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 0.35, delay: index * 0.08 }}
+              style={{
+                display: 'flex',
+                position: 'relative',
+                width: '100%',
+              }}
             >
-              <Card
-                variant="interactive"
-                padding="md"
-                onClick={() => setSelectedProject(project)}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  width: '100%',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <div>
-                  {/* Top Metadata */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      marginBottom: '1rem',
-                    }}
-                  >
-                    <Badge variant={project.category === 'mobile' ? 'accent' : 'primary'}>
-                      {project.platform}
-                    </Badge>
-                    <span
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '0.25rem',
-                        fontSize: '0.8rem',
-                        fontWeight: 600,
-                        color: 'var(--color-primary)',
-                      }}
-                    >
-                      <span>Explore Details</span>
-                      <IconArrowUpRight size={16} />
-                    </span>
-                  </div>
-
-                  {/* Project Title */}
-                  <h3
-                    style={{
-                      fontSize: '1.25rem',
-                      fontWeight: 700,
-                      color: 'var(--text-main)',
-                      marginBottom: '0.35rem',
-                      lineHeight: 1.3,
-                    }}
-                  >
-                    {project.title}
-                  </h3>
-
-                  <p
-                    style={{
-                      fontSize: '0.88rem',
-                      color: 'var(--text-muted)',
-                      marginBottom: '1.25rem',
-                      lineHeight: 1.5,
-                    }}
-                  >
-                    {project.tagline}
-                  </p>
-
-                  {/* Live Mini Preview / Mockup Graphic */}
-                  <div style={{ marginBottom: '1.25rem' }}>
-                    {renderMockup(project.mockupType)}
-                  </div>
-
-                  {/* Summary */}
-                  <p
-                    style={{
-                      fontSize: '0.9rem',
-                      color: 'var(--text-secondary)',
-                      lineHeight: 1.6,
-                      marginBottom: '1.25rem',
-                    }}
-                  >
-                    {project.summary}
-                  </p>
-                </div>
-
-                {/* Tech Stack Chips at bottom */}
-                <div
+                <Card
+                  variant="interactive"
+                  padding="md"
+                  onClick={() => setSelectedProject(project)}
                   style={{
-                    paddingTop: '1rem',
-                    borderTop: '1px solid var(--border-subtle)',
                     display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: '0.4rem',
+                    flexDirection: 'column',
+                    width: '100%',
+                    justifyContent: 'space-between',
                   }}
                 >
-                  {project.stack.map((tech) => (
-                    <Badge key={tech} variant="subtle">
-                      {tech}
-                    </Badge>
-                  ))}
-                </div>
-              </Card>
-            </motion.div>
-          ))}
+                  <div>
+                    {/* Top Metadata */}
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginBottom: '1rem',
+                      }}
+                    >
+                      <Badge variant={project.category === 'mobile' ? 'accent' : 'primary'}>
+                        {project.platform}
+                      </Badge>
+                      <span
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.25rem',
+                          fontSize: '0.8rem',
+                          fontWeight: 600,
+                          color: 'var(--color-primary)',
+                        }}
+                      >
+                        <span>Explore Details</span>
+                        <IconArrowUpRight size={16} />
+                      </span>
+                    </div>
+
+                    {/* Project Title */}
+                    <h3
+                      style={{
+                        fontSize: '1.25rem',
+                        fontWeight: 700,
+                        color: 'var(--text-main)',
+                        marginBottom: '0.35rem',
+                        lineHeight: 1.3,
+                      }}
+                    >
+                      {project.title}
+                    </h3>
+
+                    <p
+                      style={{
+                        fontSize: '0.88rem',
+                        color: 'var(--text-muted)',
+                        marginBottom: '1.25rem',
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      {project.tagline}
+                    </p>
+
+                    {/* Live Mini Preview / Mockup Graphic */}
+                    <div style={{ marginBottom: '1.25rem' }}>
+                      {renderMockup(project.mockupType)}
+                    </div>
+
+                    {/* Summary */}
+                    <p
+                      style={{
+                        fontSize: '0.9rem',
+                        color: 'var(--text-secondary)',
+                        lineHeight: 1.6,
+                        marginBottom: '1.25rem',
+                      }}
+                    >
+                      {project.summary}
+                    </p>
+                  </div>
+
+                  {/* Tech Stack Chips at bottom */}
+                  <div
+                    style={{
+                      paddingTop: '1rem',
+                      borderTop: '1px solid var(--border-subtle)',
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      gap: '0.4rem',
+                    }}
+                  >
+                    {project.stack.map((tech) => (
+                      <Badge key={tech} variant="subtle">
+                        {tech}
+                      </Badge>
+                    ))}
+                  </div>
+                </Card>
+              </motion.div>
+            ))}
         </div>
 
         {/* Project Details Modal */}
@@ -441,15 +443,6 @@ export const ProjectsSection: React.FC = () => {
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '0.5rem' }}>
                 <Button variant="secondary" onClick={() => setSelectedProject(null)}>
                   Close
-                </Button>
-                <Button
-                  variant="primary"
-                  onClick={() => {
-                    setSelectedProject(null);
-                    window.location.hash = '#contact';
-                  }}
-                >
-                  Discuss This Project
                 </Button>
               </div>
             </div>

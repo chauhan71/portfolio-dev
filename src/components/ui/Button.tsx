@@ -1,12 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import type { HTMLMotionProps } from 'framer-motion';
+import type { HTMLMotionProps, MotionStyle } from 'framer-motion';
 import type { ButtonVariant, ButtonSize } from '../../types';
 
 export interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'children'> {
   children?: React.ReactNode;
   variant?: ButtonVariant;
   size?: ButtonSize;
+  radius?: 'none' | 'sm' | 'md' | 'lg' | 'full';
   icon?: React.ReactNode;
   iconPosition?: 'left' | 'right';
   fullWidth?: boolean;
@@ -19,6 +20,7 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   variant = 'primary',
   size = 'md',
+  radius,
   icon,
   iconPosition = 'left',
   fullWidth = false,
@@ -96,7 +98,25 @@ export const Button: React.FC<ButtonProps> = ({
     }
   };
 
-  const baseStyles: React.CSSProperties = {
+  const getRadiusStyles = (): React.CSSProperties => {
+    if (!radius) return {};
+    switch (radius) {
+      case 'none':
+        return { borderRadius: '0px' };
+      case 'sm':
+        return { borderRadius: 'var(--radius-sm)' };
+      case 'md':
+        return { borderRadius: 'var(--radius-md)' };
+      case 'lg':
+        return { borderRadius: 'var(--radius-lg)' };
+      case 'full':
+        return { borderRadius: 'var(--radius-full)' };
+      default:
+        return {};
+    }
+  };
+
+  const baseStyles: MotionStyle = {
     display: fullWidth ? 'flex' : 'inline-flex',
     width: fullWidth ? '100%' : 'auto',
     alignItems: 'center',
@@ -110,6 +130,8 @@ export const Button: React.FC<ButtonProps> = ({
     lineHeight: 1,
     ...getVariantStyles(),
     ...getSizeStyles(),
+    ...getRadiusStyles(),
+    ...props.style,
   };
 
   const content = (

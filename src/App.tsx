@@ -1,13 +1,14 @@
 import { useState } from 'react';
-import { Navbar } from './components/layout/Navbar';
-import { Footer } from './components/layout/Footer';
-import { HeroSection } from './components/sections/HeroSection';
-import { ExperienceSection } from './components/sections/ExperienceSection';
-import { ProjectsSection } from './components/sections/ProjectsSection';
-import { TechStackSection } from './components/sections/TechStackSection';
-import { ArchitectureCallout } from './components/sections/ArchitectureCallout';
-import { ComponentPlayground } from './components/sections/ComponentPlayground';
-import { ContactSection } from './components/sections/ContactSection';
+import { Navbar, Footer } from './layout';
+import {
+  HeroSection,
+  ExperienceSection,
+  ProjectsSection,
+  TechStackSection,
+  ArchitectureCallout,
+  ComponentPlayground,
+  ContactSection,
+} from './sections';
 
 export function App() {
   const [navVariant, setNavVariant] = useState<'sticky' | 'floating'>('floating');

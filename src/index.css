@@ -83,11 +83,34 @@ button, input, textarea, select {
   padding-right: 1.5rem;
 }
 
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
 /* Gradient Text */
 .gradient-text {
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+/* Hero Metrics Grid - Symmetrical 2x2 on mobile, 1x4 on tablet/desktop */
+.hero-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.85rem;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+  .hero-metrics-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+  }
 }
 
 /* Subtle Grid Dot Background Pattern */
@@ -103,3 +126,147 @@ button, input, textarea, select {
   cursor: pointer;
   outline: none;
 }
+
+/* Card Top & Half-Side Gradient Accent Border on Hover */
+.card-dual-hover {
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.25s ease !important;
+}
+
+.card-dual-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 30px -4px rgba(14, 165, 233, 0.12), 
+              0 10px 20px -4px rgba(139, 92, 246, 0.12) !important;
+}
+
+.card-dual-hover .card-top-border {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 38%, rgba(0, 0, 0, 0.5) 46%, transparent 52%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 38%, rgba(0, 0, 0, 0.5) 46%, transparent 52%);
+}
+
+.card-dual-hover .card-top-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2.5px;
+  background: linear-gradient(
+    90deg, 
+    #0ea5e9 0%, 
+    #2563eb 35%, 
+    #7c3aed 70%, 
+    #a855f7 100%
+  );
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.card-dual-hover:hover .card-top-border {
+  opacity: 1;
+}
+
+/* 3D Book Page Flip for Experience Section */
+.experience-book-container {
+  perspective: 2000px;
+  max-width: 1060px;
+  margin: 0 auto;
+}
+
+.experience-book-spread {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+.page-flip-container {
+  transform-style: preserve-3d;
+  transform-origin: left center;
+  position: relative;
+  height: 100%;
+}
+
+.page-face-front {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+.page-face-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: rotateY(180deg);
+  height: 100%;
+  transform-style: preserve-3d;
+}
+
+.book-page-left {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-right: 1px solid var(--border-subtle) !important;
+  box-shadow: inset -8px 0 16px -8px rgba(0, 0, 0, 0.08) !important;
+}
+
+.book-page-right {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  border-left: 1px solid var(--border-subtle) !important;
+  box-shadow: inset 8px 0 16px -8px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Center spine crease indicator */
+.experience-book-spine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--border-strong) 15%,
+    var(--border-strong) 85%,
+    transparent
+  );
+  z-index: 5;
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .experience-book-spread {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .page-flip-container {
+    transform: none !important;
+  }
+  .page-face-back {
+    display: none !important;
+  }
+  .book-page-left,
+  .book-page-right {
+    border-radius: var(--radius-lg) !important;
+    border: 1px solid var(--border-subtle) !important;
+    box-shadow: var(--shadow-sm) !important;
+  }
+  .experience-book-spine {
+    display: none;
+  }
+}
+

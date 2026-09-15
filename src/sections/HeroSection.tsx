@@ -3,11 +3,13 @@ import { motion } from 'framer-motion';
 import {
   IconSparkles,
   IconArrowRight,
-  IconLayoutNavbar
+  IconLayoutNavbar,
+  IconBrandHtml5,
+  IconBrandJavascript,
+  IconBrandReact
 } from '@tabler/icons-react';
-import { Button } from '../ui/Button';
-import { Card } from '../ui/Card';
-import { PERSONAL_INFO } from '../../data/portfolioData';
+import { Button, Card } from '../components/ui';
+import { PERSONAL_INFO } from '../data/portfolioData';
 
 export interface HeroSectionProps {
   navVariant?: 'sticky' | 'floating';
@@ -110,7 +112,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               margin: '0 auto 2.5rem auto',
             }}
           >
-            Specialized in translating sophisticated business workflows into high-speed Web portals (React, Next.js, Angular) and dual mobile applications (React Native & Expo). Proven track record at{' '}
+            Knowledgeable in translating sophisticated business workflows into high-speed Web portals (React, Next.js, Angular) and dual mobile applications (React Native & Expo). Proven track record at{' '}
             <strong style={{ color: 'var(--text-main)' }}>uipirate</strong> delivering reusable, copy-paste UI systems.
           </motion.p>
 
@@ -169,41 +171,83 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
-                gap: '1rem',
-                maxWidth: '900px',
-                margin: '0 auto',
-              }}
-            >
-              {PERSONAL_INFO.stats.map((stat, idx) => (
+            <div className="hero-metrics-grid">
+              {[
+                {
+                  name: 'HTML5',
+                  subtitle: 'Semantic Web Structure',
+                  icon: <IconBrandHtml5 size={32} stroke={1.75} style={{ color: '#e34f26' }} />,
+                  bg: 'rgba(227, 79, 38, 0.1)',
+                },
+                {
+                  name: 'JavaScript',
+                  subtitle: 'Modern ES6+ Logic',
+                  icon: <IconBrandJavascript size={32} stroke={1.75} style={{ color: '#eab308' }} />,
+                  bg: 'rgba(234, 179, 8, 0.1)',
+                },
+                {
+                  name: 'React',
+                  subtitle: 'Component Architecture',
+                  icon: <IconBrandReact size={32} stroke={1.75} style={{ color: '#0ea5e9' }} />,
+                  bg: 'rgba(14, 165, 233, 0.1)',
+                },
+                {
+                  name: 'Expo',
+                  subtitle: 'Mobile App Engineering',
+                  icon: (
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" style={{ color: 'var(--text-main)' }}>
+                      <path d="M4.5 4.5l7.5 15 7.5-15h-3.5l-4 8-4-8z" />
+                    </svg>
+                  ),
+                  bg: 'rgba(99, 102, 241, 0.1)',
+                },
+              ].map((tech) => (
                 <Card
-                  key={idx}
-                  variant="glass"
-                  padding="sm"
-                  style={{ textAlign: 'center' }}
+                  key={tech.name}
+                  variant="interactive"
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                    gap: '0.75rem',
+                    padding: '1.75rem 1.25rem',
+                  }}
                 >
                   <div
                     style={{
-                      fontSize: '2rem',
-                      fontWeight: 800,
-                      color: 'var(--color-primary)',
-                      lineHeight: 1.1,
-                      marginBottom: '0.25rem',
+                      width: '56px',
+                      height: '56px',
+                      borderRadius: 'var(--radius-lg)',
+                      backgroundColor: tech.bg,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: 'var(--shadow-sm)',
                     }}
                   >
-                    {stat.value}
+                    {tech.icon}
                   </div>
-                  <div
-                    style={{
-                      fontSize: '0.85rem',
-                      fontWeight: 600,
-                      color: 'var(--text-secondary)',
-                    }}
-                  >
-                    {stat.label}
+                  <div>
+                    <h3
+                      style={{
+                        fontSize: '1.05rem',
+                        fontWeight: 700,
+                        color: 'var(--text-main)',
+                        marginBottom: '0.2rem',
+                      }}
+                    >
+                      {tech.name}
+                    </h3>
+                    <p
+                      style={{
+                        fontSize: '0.78rem',
+                        color: 'var(--text-muted)',
+                        lineHeight: 1.4,
+                      }}
+                    >
+                      {tech.subtitle}
+                    </p>
                   </div>
                 </Card>
               ))}

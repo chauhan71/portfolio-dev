@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
-import { 
-  IconSparkles, 
-  IconCopy, 
-  IconCheck, 
-  IconLayersSubtract, 
-  IconComponents, 
+import {
+  IconSparkles,
+  IconCopy,
+  IconCheck,
+  IconLayersSubtract,
+  IconComponents,
   IconLayoutNavbar,
-  IconPalette
+  IconPalette,
+  IconInfoCircle
 } from '@tabler/icons-react';
-import { SectionHeader } from '../layout/SectionHeader';
-import { Card } from '../ui/Card';
-import { Button } from '../ui/Button';
-import { Badge } from '../ui/Badge';
-import type { ButtonVariant, CardVariant } from '../../types';
+import { SectionHeader } from '../layout';
+import { Card, Button, Badge } from '../components/ui';
+import type { ButtonVariant, CardVariant } from '../types';
 
 interface ComponentPlaygroundProps {
   navVariant: 'floating' | 'sticky';
@@ -25,6 +24,10 @@ export const ComponentPlayground: React.FC<ComponentPlaygroundProps> = ({
 }) => {
   const [selectedButtonVariant, setSelectedButtonVariant] = useState<ButtonVariant>('primary');
   const [selectedButtonSize, setSelectedButtonSize] = useState<'sm' | 'md' | 'lg'>('md');
+  const [selectedRadius, setSelectedRadius] = useState<'none' | 'sm' | 'md' | 'full'>('md');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
+  const [showIcon, setShowIcon] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<'buttons' | 'cards' | 'navbar' | 'tokens'>('buttons');
   const [copied, setCopied] = useState<string | null>(null);
 
@@ -36,10 +39,13 @@ export const ComponentPlayground: React.FC<ComponentPlaygroundProps> = ({
 
   const buttonVariants: ButtonVariant[] = ['primary', 'secondary', 'outline', 'ghost', 'accent'];
   const cardVariants: { variant: CardVariant; label: string; desc: string }[] = [
-    { variant: 'default', label: 'Default Card', desc: 'Solid surface with subtle ambient elevation shadow' },
-    { variant: 'bordered', label: 'Bordered Card', desc: 'Clean 1px stroke for high contrast corporate hierarchy' },
-    { variant: 'glass', label: 'Glassmorphic Card', desc: 'Frosted 16px backdrop blur with translucent borders' },
-    { variant: 'interactive', label: 'Interactive Card', desc: 'Framer Motion lift, glow effect, and responsive cursor' },
+    { variant: 'default', label: 'Default Surface', desc: 'Solid surface with subtle ambient elevation shadow for content cards.' },
+    { variant: 'bordered', label: 'Bordered High-Contrast', desc: 'Clean 1px strong stroke for high contrast data tables and enterprise screens.' },
+    { variant: 'glass', label: 'Glassmorphic Frost', desc: 'Frosted 16px backdrop blur with translucent border for modern floating UI.' },
+    { variant: 'interactive', label: 'Interactive Hover', desc: 'Framer Motion spring lift, ambient glow, and pointer feedback.' },
+    { variant: 'elevated', label: 'High Elevation Drop', desc: 'Deep multi-layer drop-shadow for popovers, modals, and spotlight cards.' },
+    { variant: 'subtle', label: 'Subtle Ghost Surface', desc: 'Flat background with zero border for quiet dashboard groupings.' },
+    { variant: 'accent', label: 'Indigo Brand Accent', desc: 'Brand accent border with soft radiant glow for highlighted or pro tiers.' },
   ];
 
   return (
@@ -62,15 +68,17 @@ export const ComponentPlayground: React.FC<ComponentPlaygroundProps> = ({
             flexWrap: 'wrap',
           }}
         >
-          {[
-            { id: 'buttons', label: 'Button Variants', icon: <IconComponents size={16} /> },
-            { id: 'cards', label: 'Card Variants', icon: <IconLayersSubtract size={16} /> },
-            { id: 'navbar', label: 'Navbar Styles', icon: <IconLayoutNavbar size={16} /> },
-            { id: 'tokens', label: 'Reusable Colors & Tokens', icon: <IconPalette size={16} /> },
-          ].map((tab) => (
+          {(
+            [
+              { id: 'buttons', label: 'Button Variants', icon: <IconComponents size={16} /> },
+              { id: 'cards', label: 'Card Variants', icon: <IconLayersSubtract size={16} /> },
+              { id: 'navbar', label: 'Navbar Styles', icon: <IconLayoutNavbar size={16} /> },
+              { id: 'tokens', label: 'Reusable Colors', icon: <IconPalette size={16} /> },
+            ] as const
+          ).map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
+              onClick={() => setActiveTab(tab.id)}
               className="btn-reset"
               style={{
                 display: 'inline-flex',
@@ -112,7 +120,14 @@ export const ComponentPlayground: React.FC<ComponentPlaygroundProps> = ({
                   variant="outline"
                   size="sm"
                   icon={copied === 'btn-code' ? <IconCheck size={16} /> : <IconCopy size={16} />}
-                  onClick={() => copyCode(`<Button variant="${selectedButtonVariant}" size="${selectedButtonSize}">Action</Button>`, 'btn-code')}
+                  onClick={() => {
+                    let propsStr = `variant="${selectedButtonVariant}" size="${selectedButtonSize}"`;
+                    if (selectedRadius !== 'md') propsStr += ` radius="${selectedRadius}"`;
+                    if (isLoading) propsStr += ` isLoading`;
+                    if (isDisabled) propsStr += ` disabled`;
+                    if (showIcon) propsStr += ` icon={<IconSparkles size={16} />}`;
+                    copyCode(`<Button ${propsStr}>Action</Button>`, 'btn-code');
+                  }}
                 >
                   {copied === 'btn-code' ? 'Copied' : 'Copy JSX'}
                 </Button>
@@ -129,7 +144,7 @@ export const ComponentPlayground: React.FC<ComponentPlaygroundProps> = ({
                   backgroundColor: 'var(--bg-app)',
                   borderRadius: 'var(--radius-md)',
                   border: '1px solid var(--border-subtle)',
-                  marginBottom: '2rem',
+                  marginBottom: '1.75rem',
                 }}
               >
                 {buttonVariants.map((variant) => (
@@ -137,7 +152,10 @@ export const ComponentPlayground: React.FC<ComponentPlaygroundProps> = ({
                     key={variant}
                     variant={variant}
                     size={selectedButtonSize}
-                    icon={<IconSparkles size={16} />}
+                    radius={selectedRadius}
+                    isLoading={isLoading}
+                    disabled={isDisabled}
+                    icon={showIcon ? <IconSparkles size={16} /> : undefined}
                     onClick={() => setSelectedButtonVariant(variant)}
                   >
                     {variant.charAt(0).toUpperCase() + variant.slice(1)} Variant
@@ -145,33 +163,153 @@ export const ComponentPlayground: React.FC<ComponentPlaygroundProps> = ({
                 ))}
               </div>
 
-              {/* Control panel */}
-              <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', paddingTop: '1rem', borderTop: '1px solid var(--border-subtle)' }}>
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
-                    SIZE SCALES:
+              {/* Control Panel: Filters for Size, Radius, States & Icon as Dropdowns */}
+              <div
+                style={{
+                  display: 'flex',
+                  gap: '1.5rem',
+                  flexWrap: 'wrap',
+                  alignItems: 'flex-end',
+                  paddingTop: '1.25rem',
+                  borderTop: '1px solid var(--border-subtle)',
+                  rowGap: '1rem',
+                }}
+              >
+                {/* 1. Size Dropdown */}
+                <div style={{ flex: '1 1 140px' }}>
+                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.04em', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+                    SIZE SCALE:
                   </label>
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    {(['sm', 'md', 'lg'] as const).map((s) => (
-                      <button
-                        key={s}
-                        onClick={() => setSelectedButtonSize(s)}
-                        className="btn-reset"
-                        style={{
-                          padding: '0.35rem 0.85rem',
-                          borderRadius: 'var(--radius-sm)',
-                          fontSize: '0.85rem',
-                          fontWeight: 600,
-                          backgroundColor: selectedButtonSize === s ? 'var(--color-primary-light)' : 'var(--surface-elevated)',
-                          color: selectedButtonSize === s ? 'var(--color-primary)' : 'var(--text-secondary)',
-                          border: '1px solid var(--border-subtle)',
-                          cursor: 'pointer',
-                        }}
-                      >
-                        {s.toUpperCase()}
-                      </button>
-                    ))}
-                  </div>
+                  <select
+                    value={selectedButtonSize}
+                    onChange={(e) => setSelectedButtonSize(e.target.value as 'sm' | 'md' | 'lg')}
+                    style={{
+                      width: '100%',
+                      backgroundColor: 'var(--surface-elevated)',
+                      color: 'var(--text-main)',
+                      border: '1px solid var(--border-subtle)',
+                      borderRadius: 'var(--radius-sm)',
+                      padding: '0.45rem 1rem 0.45rem 0.75rem',
+                      fontSize: '0.84rem',
+                      fontWeight: 500,
+                      cursor: 'pointer',
+                      outline: 'none',
+                    }}
+                  >
+                    <option value="sm">Small (SM)</option>
+                    <option value="md">Medium (MD)</option>
+                    <option value="lg">Large (LG)</option>
+                  </select>
+                </div>
+
+                {/* 2. Border Radius Dropdown */}
+                <div style={{ flex: '1 1 140px' }}>
+                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.04em', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+                    CORNER RADIUS:
+                  </label>
+                  <select
+                    value={selectedRadius}
+                    onChange={(e) => setSelectedRadius(e.target.value as 'none' | 'sm' | 'md' | 'full')}
+                    style={{
+                      width: '100%',
+                      backgroundColor: 'var(--surface-elevated)',
+                      color: 'var(--text-main)',
+                      border: '1px solid var(--border-subtle)',
+                      borderRadius: 'var(--radius-sm)',
+                      padding: '0.45rem 1rem 0.45rem 0.75rem',
+                      fontSize: '0.84rem',
+                      fontWeight: 500,
+                      cursor: 'pointer',
+                      outline: 'none',
+                    }}
+                  >
+                    <option value="none">Square</option>
+                    <option value="sm">Subtle</option>
+                    <option value="md">Default</option>
+                    <option value="full">Pill </option>
+                  </select>
+                </div>
+
+                {/* 3. Interactive State Dropdown */}
+                <div style={{ flex: '1 1 140px' }}>
+                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.04em', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+                    BUTTON STATE:
+                  </label>
+                  <select
+                    value={isLoading ? 'loading' : isDisabled ? 'disabled' : 'normal'}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setIsLoading(val === 'loading');
+                      setIsDisabled(val === 'disabled');
+                    }}
+                    style={{
+                      width: '100%',
+                      backgroundColor: 'var(--surface-elevated)',
+                      color: 'var(--text-main)',
+                      border: '1px solid var(--border-subtle)',
+                      borderRadius: 'var(--radius-sm)',
+                      padding: '0.45rem 1rem 0.45rem 0.75rem',
+                      fontSize: '0.84rem',
+                      fontWeight: 500,
+                      cursor: 'pointer',
+                      outline: 'none',
+                    }}
+                  >
+                    <option value="normal">Default State</option>
+                    <option value="loading">Loading Spinner</option>
+                    <option value="disabled">Disabled State</option>
+                  </select>
+                </div>
+
+                {/* 4. Icon Display Dropdown */}
+                <div style={{ flex: '1 1 140px' }}>
+                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.04em', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+                    ICON DISPLAY:
+                  </label>
+                  <select
+                    value={showIcon ? 'yes' : 'no'}
+                    onChange={(e) => setShowIcon(e.target.value === 'yes')}
+                    style={{
+                      width: '100%',
+                      backgroundColor: 'var(--surface-elevated)',
+                      color: 'var(--text-main)',
+                      border: '1px solid var(--border-subtle)',
+                      borderRadius: 'var(--radius-sm)',
+                      padding: '0.45rem 1rem 0.45rem 0.75rem',
+                      fontSize: '0.84rem',
+                      fontWeight: 500,
+                      cursor: 'pointer',
+                      outline: 'none',
+                    }}
+                  >
+                    <option value="yes">With Icon</option>
+                    <option value="no">No Icon</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Design System Illustration Note */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '0.75rem',
+                  padding: '0.9rem 1.15rem',
+                  backgroundColor: 'var(--bg-app)',
+                  borderRadius: 'var(--radius-md)',
+                  border: '1px solid var(--border-subtle)',
+                  marginTop: '1.75rem',
+                  fontSize: '0.85rem',
+                  lineHeight: 1.55,
+                  color: 'var(--text-secondary)',
+                }}
+              >
+                <IconInfoCircle size={18} style={{ color: 'var(--color-primary)', flexShrink: 0, marginTop: '0.12rem' }} />
+                <div>
+                  <strong style={{ color: 'var(--text-main)', display: 'block', marginBottom: '0.25rem' }}>
+                    Quick Note on This UI Playground:
+                  </strong>
+                  This section is just a simple example to showcase UI component and styling skills, not a full production design tool. In a real-world app, each button (Primary, Ghost, Outline, etc.) could have its own separate controls, customized states, and dedicated copy-paste code. We kept it simple and combined them here so you can easily test the options without making the layout too complicated.
                 </div>
               </div>
             </Card>

@@ -3,7 +3,7 @@ export type Theme = 'light' | 'dark';
 export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'accent';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
-export type CardVariant = 'default' | 'bordered' | 'glass' | 'interactive';
+export type CardVariant = 'default' | 'bordered' | 'glass' | 'interactive' | 'elevated' | 'subtle' | 'accent';
 export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
 
 export type BadgeVariant = 'primary' | 'accent' | 'subtle' | 'outline' | 'success';

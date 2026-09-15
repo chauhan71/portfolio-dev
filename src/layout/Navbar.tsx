@@ -11,9 +11,9 @@ import {
   IconLayersSubtract,
   IconSend
 } from '@tabler/icons-react';
-import { useTheme } from '../../context/ThemeContext';
-import { Button } from '../ui/Button';
-import profilePic from '../../assets/my pic.jpeg';
+import { useTheme } from '../context/ThemeContext';
+import { Button } from '../components/ui';
+import profilePic from '../assets/my pic.jpeg';
 
 export interface NavbarProps {
   variant?: 'floating' | 'sticky';
@@ -25,6 +25,19 @@ export const Navbar: React.FC<NavbarProps> = ({ variant = 'floating' }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
   const [hoveredSection, setHoveredSection] = useState<string | null>(null);
+  const [showProfileCard, setShowProfileCard] = useState(false);
+  const profileTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleProfileMouseEnter = () => {
+    if (profileTimerRef.current) clearTimeout(profileTimerRef.current);
+    setShowProfileCard(true);
+  };
+
+  const handleProfileMouseLeave = () => {
+    profileTimerRef.current = setTimeout(() => {
+      setShowProfileCard(false);
+    }, 200);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,7 +69,7 @@ export const Navbar: React.FC<NavbarProps> = ({ variant = 'floating' }) => {
     { label: 'Projects', href: '#projects', id: 'projects', icon: <IconDeviceMobile size={16} /> },
     { label: 'Tech Stack', href: '#tech-stack', id: 'tech-stack', icon: <IconCode size={16} /> },
     { label: 'Architecture', href: '#architecture', id: 'architecture', icon: <IconLayersSubtract size={16} /> },
-    { label: 'Components', href: '#playground', id: 'playground', badge: 'Variants' },
+    { label: 'Components', href: '#playground', id: 'playground' },
   ];
 
   return (
@@ -82,7 +95,7 @@ export const Navbar: React.FC<NavbarProps> = ({ variant = 'floating' }) => {
           WebkitBackdropFilter: isScrolled || variant === 'floating' ? 'blur(16px)' : 'none',
           borderBottom: variant === 'sticky' ? (isScrolled ? '1px solid var(--border-subtle)' : '1px solid transparent') : 'none',
           border: variant === 'floating' ? '1px solid var(--surface-glass-border)' : undefined,
-          borderRadius: variant === 'floating' ? 'var(--radius-xl)' : 0,
+          borderRadius: variant === 'floating' ? 'var(--radius-full)' : 0,
           boxShadow: isScrolled || variant === 'floating' ? 'var(--shadow-md)' : 'none',
           transition: 'background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease',
         }}
@@ -94,49 +107,201 @@ export const Navbar: React.FC<NavbarProps> = ({ variant = 'floating' }) => {
             alignItems: 'center',
             justifyContent: 'space-between',
             height: '68px',
+            paddingLeft: variant === 'floating' ? '1.75rem' : undefined,
+            paddingRight: variant === 'floating' ? '1.75rem' : undefined,
           }}
         >
-          {/* Brand Logo */}
-          <a
-            href="#hero"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.65rem',
-              fontWeight: 800,
-              fontSize: '1.15rem',
-              color: 'var(--text-main)',
-            }}
+          {/* Brand Logo & Profile Hover Card */}
+          <div
+            style={{ position: 'relative' }}
+            onMouseEnter={handleProfileMouseEnter}
+            onMouseLeave={handleProfileMouseLeave}
           >
-            <span
+            <a
+              href="#hero"
               style={{
-                display: 'inline-flex',
+                display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                width: '38px',
-                height: '38px',
-                borderRadius: 'var(--radius-full)',
-                overflow: 'hidden',
-                border: '2px solid var(--color-primary)',
-                boxShadow: '0 2px 8px rgba(37, 99, 235, 0.25)',
-                flexShrink: 0,
+                gap: '0.65rem',
+                fontWeight: 800,
+                fontSize: '1.15rem',
+                color: 'var(--text-main)',
               }}
             >
-              <img
-                src={profilePic}
-                alt="Ritik"
+              <span
                 style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  display: 'block',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '38px',
+                  height: '38px',
+                  borderRadius: 'var(--radius-full)',
+                  overflow: 'hidden',
+                  border: '2px solid var(--color-primary)',
+                  boxShadow: '0 2px 8px rgba(37, 99, 235, 0.25)',
+                  flexShrink: 0,
                 }}
-              />
-            </span>
-            <span>
-              Ritik<span style={{ color: 'var(--color-primary)' }}>Portfolio</span>
-            </span>
-          </a>
+              >
+                <img
+                  src={profilePic}
+                  alt="Ritik"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
+                  }}
+                />
+              </span>
+              <span>
+                Ritik<span style={{ color: 'var(--color-primary)' }}>Portfolio</span>
+              </span>
+            </a>
+
+            {/* Hover Profile Popover Card */}
+            <AnimatePresence>
+              {showProfileCard && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                  transition={{ duration: 0.2, ease: 'easeOut' }}
+                  style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 14px)',
+                    left: 0,
+                    width: '380px',
+                    backgroundColor: 'var(--surface-card)',
+                    border: '1px solid var(--border-subtle)',
+                    borderRadius: 'var(--radius-lg)',
+                    boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.22), 0 4px 16px -2px rgba(0, 0, 0, 0.08)',
+                    padding: '1.25rem',
+                    zIndex: 1000,
+                    display: 'flex',
+                    gap: '1.15rem',
+                    backdropFilter: 'blur(16px)',
+                  }}
+                >
+                  {/* Left Side: Full Photo */}
+                  <div
+                    style={{
+                      width: '105px',
+                      height: '135px',
+                      borderRadius: 'var(--radius-md)',
+                      overflow: 'hidden',
+                      flexShrink: 0,
+                      border: '1px solid var(--border-subtle)',
+                      boxShadow: '0 4px 14px rgba(0, 0, 0, 0.12)',
+                    }}
+                  >
+                    <img
+                      src={profilePic}
+                      alt="Ritik"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        display: 'block',
+                      }}
+                    />
+                  </div>
+
+                  {/* Right Side: Header & Bio Info */}
+                  <div
+                    style={{
+                      flex: 1,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    <div>
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          marginBottom: '0.2rem',
+                        }}
+                      >
+                        <h4
+                          style={{
+                            fontSize: '1.15rem',
+                            fontWeight: 800,
+                            color: 'var(--text-main)',
+                            margin: 0,
+                          }}
+                        >
+                          Ritik Chauhan
+                        </h4>
+                        <span
+                          style={{
+                            width: '8px',
+                            height: '8px',
+                            borderRadius: 'var(--radius-full)',
+                            backgroundColor: 'var(--color-success)',
+                            boxShadow: '0 0 8px var(--color-success)',
+                          }}
+                          title="Open for opportunities"
+                        />
+                      </div>
+
+                      <p
+                        style={{
+                          fontSize: '0.82rem',
+                          fontWeight: 600,
+                          color: 'var(--color-primary)',
+                          marginBottom: '0.55rem',
+                        }}
+                      >
+                        Web & mobile Frontend Dev
+                      </p>
+
+                      <p
+                        style={{
+                          fontSize: '0.8rem',
+                          color: 'var(--text-secondary)',
+                          lineHeight: 1.45,
+                          margin: 0,
+                        }}
+                      >
+                        Engineering scalable React, Angular, Next.js & React Native architectures with clean corporate standards.
+                      </p>
+                    </div>
+
+                    <div
+                      style={{
+                        marginTop: '0.75rem',
+                        paddingTop: '0.65rem',
+                        borderTop: '1px solid var(--border-subtle)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                        Open for Roles
+                      </span>
+                      <a
+                        href="#contact"
+                        onClick={() => setShowProfileCard(false)}
+                        style={{
+                          fontSize: '0.78rem',
+                          fontWeight: 700,
+                          color: 'var(--color-primary)',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.2rem',
+                        }}
+                      >
+                        Get in Touch &rarr;
+                      </a>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
           {/* Desktop Navigation Links */}
           <div
@@ -168,8 +333,8 @@ export const Navbar: React.FC<NavbarProps> = ({ variant = 'floating' }) => {
                     color: isActive
                       ? 'var(--color-primary)'
                       : isHovered
-                      ? 'var(--color-primary)'
-                      : 'var(--text-secondary)',
+                        ? 'var(--color-primary)'
+                        : 'var(--text-secondary)',
                     transition: 'color 0.2s ease',
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -194,22 +359,7 @@ export const Navbar: React.FC<NavbarProps> = ({ variant = 'floating' }) => {
                   {/* Label */}
                   <span>{item.label}</span>
 
-                  {/* Badge */}
-                  {item.badge && (
-                    <span
-                      style={{
-                        fontSize: '0.65rem',
-                        fontWeight: 700,
-                        padding: '0.12rem 0.45rem',
-                        borderRadius: 'var(--radius-full)',
-                        backgroundColor: isActive ? 'var(--color-primary-light)' : 'var(--color-accent-light)',
-                        color: isActive ? 'var(--color-primary)' : 'var(--color-accent)',
-                        border: '1px solid rgba(99, 102, 241, 0.2)',
-                      }}
-                    >
-                      {item.badge}
-                    </span>
-                  )}
+
                 </motion.a>
               );
             })}
@@ -325,21 +475,7 @@ export const Navbar: React.FC<NavbarProps> = ({ variant = 'floating' }) => {
                     {item.icon}
                   </span>
                   <span>{item.label}</span>
-                  {item.badge && (
-                    <span
-                      style={{
-                        marginLeft: 'auto',
-                        fontSize: '0.7rem',
-                        fontWeight: 700,
-                        padding: '0.15rem 0.5rem',
-                        borderRadius: 'var(--radius-full)',
-                        backgroundColor: 'var(--color-accent-light)',
-                        color: 'var(--color-accent)',
-                      }}
-                    >
-                      {item.badge}
-                    </span>
-                  )}
+
                 </a>
               );
             })}
@@ -359,7 +495,7 @@ export const Navbar: React.FC<NavbarProps> = ({ variant = 'floating' }) => {
       </AnimatePresence>
 
       <style>{`
-        @media (min-width: 868px) {
+        @media (min-width: 960px) {
           .desktop-nav-links {
             display: flex !important;
           }
